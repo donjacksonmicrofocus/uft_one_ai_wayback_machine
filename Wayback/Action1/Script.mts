@@ -50,32 +50,77 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 		CurrentYearPlusMonth = CurrentYear & CurrentMonth
 		CurrentURL = "https://web.archive.org/web/" & CurrentYear & CurrentMonth & "/" & Parameter.Item("URL")
 	End If
-	If (((CurrentYearPlusMonth >= 201007) and (CurrentYearPlusMonth < 201102)) or ((CurrentYearPlusMonth >= 201109) and (CurrentYearPlusMonth < 201111))) Then
+	If (((CurrentYearPlusMonth >= 201007) and (CurrentYearPlusMonth < 201102)) or ((CurrentYearPlusMonth >= 201109) and (CurrentYearPlusMonth < 201111)) _
+	or (CurrentYearPlusMonth = 201201) or (CurrentYearPlusMonth = 201204) or (CurrentYearPlusMonth = 201210) or (CurrentYearPlusMonth = 201507) _
+	or (CurrentYearPlusMonth = 201508) or (CurrentYearPlusMonth = 201510) or (CurrentYearPlusMonth = 201602) or (CurrentYearPlusMonth = 201607) _
+	or (CurrentYearPlusMonth = 201608) or (CurrentYearPlusMonth >= 201611 and CurrentYearPlusMonth < 201702) or (CurrentYearPlusMonth = 201703) _
+	or (CurrentYearPlusMonth = 201704) or (CurrentYearPlusMonth = 201706) or (CurrentYearPlusMonth = 201707) or (CurrentYearPlusMonth = 201801) _
+	or (CurrentYearPlusMonth = 201806) or (CurrentYearPlusMonth = 201812)) Then
 		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine is broken on this page, skipping."
 	Else
 		AppContext.Navigate CurrentURL
 		AppContext.Sync	
-		If (AIUtil.FindText("est un").Exist(0) = True) or (AIUtil.FindText("ouvert").Exist(0)) Then
-			Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded the French version of the page."
+		AIUtil.FindTextBlock("facebook").Hover
+		AIUtil.Context.Freeze
+		If (AIUtil.FindText("est un").Exist(0) = True) or (AIUtil.FindText("ouvert").Exist(0) = True) or (AIUtil.FindText("Het is gratis").Exist(0) = True) _ 
+		or (AIUtil.FindText("Homme").Exist(0) = True) or (AIUtil.FindText("nyt ja").Exist(0) = True) or (AIUtil.FindText("e sempre").Exist(0) = True) _ 
+		or (AIUtil.FindText("und blei").Exist(0) - True) Then
+			Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded a different language version of the page."
 		ElseIf AIUtil.FindText("302 response").Exist(0) Then
 			Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine got an HTTP 302 response at crawl time."
 		Else
-			AIUtil.Context.Freeze
 			'######################################################################################################
-			'https://web.archive.org/web/200810/http://facebook.com/ Labels for the e-mail and password fields gone, modification needed
+			'Change 1 https://web.archive.org/web/200810/http://facebook.com/ Labels for the e-mail and password fields gone, modification needed
 			'######################################################################################################
-			'https://web.archive.org/web/200909/http://facebook.com/ Labels reappear, now as pre-populated values in the boxes, modification needed
+			'Change 2 https://web.archive.org/web/200909/http://facebook.com/ Labels reappear, now as pre-populated values in the boxes, modification needed
 			'######################################################################################################
-			'https://web.archive.org/web/201001/http://facebook.com/ Password label removed again
+			'Change 3 https://web.archive.org/web/201001/http://facebook.com/ Password label removed again
 			'######################################################################################################
-			'https://web.archive.org/web/201006/http://facebook.com/ Password and E-mail labels above the fields again
+			'Change 4 https://web.archive.org/web/201006/http://facebook.com/ Password and E-mail labels above the fields again
 			'######################################################################################################
 			'Starting https://web.archive.org/web/201007/http://facebook.com/ errors, gets into a loop of partially loading the page, then starts a reload
 			'Resolved after https://web.archive.org/web/201102/http://facebook.com/ 
 			'######################################################################################################
 			'Starting https://web.archive.org/web/201109/http://facebook.com/, same errors, not resolved until https://web.archive.org/web/201111/http://facebook.com/
+			'######################################################################################################
+			'https://web.archive.org/web/201201/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201204/http://facebook.com/ is broken too
+			'######################################################################################################
+			'Change 5 https://web.archive.org/web/201205/http://facebook.com/ login label changed to be "Email or Phone"
+			'######################################################################################################
+			'https://web.archive.org/web/201210/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201507/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201510/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201602/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201607/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201608/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201611/http://facebook.com/ is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201703/http://facebook.com/ and 04 is broken too
+			'######################################################################################################
+			'https://web.archive.org/web/201706/http://facebook.com/ and 07 is broken too (crawl had an already logged in user)
+			'######################################################################################################
+			'https://web.archive.org/web/201801/http://facebook.com/ is broken too (crawl had an already logged in user)
+			'######################################################################################################
+			'https://web.archive.org/web/201806/http://facebook.com/ is broken too (looks like it loaded the mobile version)
+			'######################################################################################################
+			'https://web.archive.org/web/201812/http://facebook.com/ is broken too
 			Select Case True
-				Case (CurrentYearPlusMonth >= 201006)
+				Case (CurrentYearPlusMonth >= 201205)
+'					AIUtil("text_box", "Email or Phone").Highlight
+					AIUtil("text_box", "Email or Phone").SetText "user@domain.com"
+'					AIUtil("text_box", "Password").Highlight
+					AIUtil("text_box", "Password").SetText "Password"
+					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).Highlight
+					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).CheckExists True
+				Case ((CurrentYearPlusMonth >= 201006) and (CurrentYearPlusMonth < 201205))
 					AIUtil.Context.Unfreeze
 					AIUtil.FindText("It's free").Click
 					AIUtil.Context.Freeze
