@@ -50,79 +50,86 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 		CurrentYearPlusMonth = CurrentYear & CurrentMonth
 		CurrentURL = "https://web.archive.org/web/" & CurrentYear & CurrentMonth & "/" & Parameter.Item("URL")
 	End If
-	AppContext.Navigate CurrentURL
-	AppContext.Sync	
-	If (AIUtil.FindText("est un").Exist(0) = True) or (AIUtil.FindText("ouvert").Exist(0)) Then
-		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded the French version of the page."
-	ElseIf AIUtil.FindText("302 response").Exist(0) Then
-		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine got an HTTP 302 response at crawl time."
+	If (((CurrentYearPlusMonth >= 201007) and (CurrentYearPlusMonth < 201102)) or ((CurrentYearPlusMonth >= 201109) and (CurrentYearPlusMonth < 201111))) Then
+		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine is broken on this page, skipping."
 	Else
-		AIUtil.Context.Freeze
-		'######################################################################################################
-		'https://web.archive.org/web/200810/http://facebook.com/ Labels for the e-mail and password fields gone, modification needed
-		'######################################################################################################
-		'https://web.archive.org/web/200909/http://facebook.com/ Labels reappear, now as pre-populated values in the boxes, modification needed
-		'######################################################################################################
-		'https://web.archive.org/web/201001/http://facebook.com/ Password label removed again
-		'######################################################################################################
-		'https://web.archive.org/web/201006/http://facebook.com/ Password and E-mail labels above the fields again
-		'######################################################################################################
-		Select Case True
-			Case (CurrentYearPlusMonth >= 201006)
-				AIUtil.Context.Unfreeze
-				AIUtil.FindText("It's free").Click
-				AIUtil.Context.Freeze
-				AIUtil("text_box", "Email").Highlight
-				AIUtil("text_box", "Email").SetText "user@domain.com"
-				AIUtil("text_box", "Password").Type ""
-				AIUtil("text_box", "Password").Highlight
-				AIUtil("text_box", "Password").SetText "Password"
-				AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).Highlight
-				AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).CheckExists True
-			Case ((CurrentYearPlusMonth >= 201001) and (CurrentYearPlusMonth < 201006))
-				AIUtil.Context.Unfreeze
-				AIUtil.FindText("It's free").Click
-				AIUtil.Context.Freeze
-				AIUtil("text_box", "Email").Highlight
-				AIUtil("text_box", "Email").SetText "user@domain.com"
-				AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).Highlight
-				AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).SetText "Password"
-				AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?"))).Highlight
-				AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?"))).CheckExists True
-			Case ((CurrentYearPlusMonth >= 200909) and (CurrentYearPlusMonth < 201001))
-				AIUtil.Context.Unfreeze
-				AIUtil.FindText("It's free").Click
-				AIUtil.Context.Freeze
-'				AIUtil("text_box", "Email").Highlight
-				AIUtil("text_box", "Email").SetText "user@domain.com"
-'				AIUtil("text_box", "Password").Highlight
-				AIUtil("text_box", "Password").SetText "Password"
-				AIUtil("button", "Login").Highlight
-				AIUtil("button", "Login").CheckExists True
-			Case ((CurrentYearPlusMonth >= 200810) and (CurrentYearPlusMonth < 200909	))
-'				AIUtil("text_box", micAnyText, micWithAnchorOnRight, AIUtil.FindTextBlock("Remember Me")).Highlight
-				AIUtil("text_box", micAnyText, micWithAnchorOnRight, AIUtil.FindTextBlock("Remember Me")).SetText "user@domain.com"
-'				AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).Highlight
-				AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).SetText "Password"
-				AIUtil("button", "Login").Highlight
-				AIUtil("button", "Login").CheckExists True
-			Case Else
-'				AIUtil("text_box", "E-mail:").Highlight	
-				AIUtil("text_box", "E-mail:").SetText "user@domain.com"
-				If AIUtil("text_box", "Password:").Exist(0) = True Then
-'					AIUtil("text_box", "Password:").Highlight
-					AIUtil("text_box", "Password:").SetText "Password"
-					Set PasswordField = AIUtil("text_box", "Password:")
-				ElseIf AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")) = True Then	
-'					AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")).Highlight
-					AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")).SetText "Password"
-					Set PasswordField = AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password"))
-				Else
-					msgbox "Can't find Password field"
-				End If
-				AIUtil("button", micAnyText, micWithAnchorAbove, PasswordField).Highlight
-				AIUtil("button", micAnyText, micWithAnchorAbove, PasswordField).CheckExists True
-		End Select
+		AppContext.Navigate CurrentURL
+		AppContext.Sync	
+		If (AIUtil.FindText("est un").Exist(0) = True) or (AIUtil.FindText("ouvert").Exist(0)) Then
+			Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded the French version of the page."
+		ElseIf AIUtil.FindText("302 response").Exist(0) Then
+			Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine got an HTTP 302 response at crawl time."
+		Else
+			AIUtil.Context.Freeze
+			'######################################################################################################
+			'https://web.archive.org/web/200810/http://facebook.com/ Labels for the e-mail and password fields gone, modification needed
+			'######################################################################################################
+			'https://web.archive.org/web/200909/http://facebook.com/ Labels reappear, now as pre-populated values in the boxes, modification needed
+			'######################################################################################################
+			'https://web.archive.org/web/201001/http://facebook.com/ Password label removed again
+			'######################################################################################################
+			'https://web.archive.org/web/201006/http://facebook.com/ Password and E-mail labels above the fields again
+			'######################################################################################################
+			'Starting https://web.archive.org/web/201007/http://facebook.com/ errors, gets into a loop of partially loading the page, then starts a reload
+			'Resolved after https://web.archive.org/web/201102/http://facebook.com/ 
+			'######################################################################################################
+			'Starting https://web.archive.org/web/201109/http://facebook.com/, same errors, not resolved until https://web.archive.org/web/201111/http://facebook.com/
+			Select Case True
+				Case (CurrentYearPlusMonth >= 201006)
+					AIUtil.Context.Unfreeze
+					AIUtil.FindText("It's free").Click
+					AIUtil.Context.Freeze
+					AIUtil("text_box", "Email").Highlight
+					AIUtil("text_box", "Email").SetText "user@domain.com"
+					AIUtil("text_box", "Password").Highlight
+					AIUtil("text_box", "Password").SetText "Password"
+					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).Highlight
+					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).CheckExists True
+				Case ((CurrentYearPlusMonth >= 201001) and (CurrentYearPlusMonth < 201006))
+					AIUtil.Context.Unfreeze
+					AIUtil.FindText("It's free").Click
+					AIUtil.Context.Freeze
+	'				AIUtil("text_box", "Email").Highlight
+					AIUtil("text_box", "Email").SetText "user@domain.com"
+	'				AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).Highlight
+					AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).SetText "Password"
+					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?"))).Highlight
+					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?"))).CheckExists True
+				Case ((CurrentYearPlusMonth >= 200909) and (CurrentYearPlusMonth < 201001))
+					AIUtil.Context.Unfreeze
+					AIUtil.FindText("It's free").Click
+					AIUtil.Context.Freeze
+	'				AIUtil("text_box", "Email").Highlight
+					AIUtil("text_box", "Email").SetText "user@domain.com"
+	'				AIUtil("text_box", "Password").Highlight
+					AIUtil("text_box", "Password").SetText "Password"
+					AIUtil("button", "Login").Highlight
+					AIUtil("button", "Login").CheckExists True
+				Case ((CurrentYearPlusMonth >= 200810) and (CurrentYearPlusMonth < 200909	))
+	'				AIUtil("text_box", micAnyText, micWithAnchorOnRight, AIUtil.FindTextBlock("Remember Me")).Highlight
+					AIUtil("text_box", micAnyText, micWithAnchorOnRight, AIUtil.FindTextBlock("Remember Me")).SetText "user@domain.com"
+	'				AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).Highlight
+					AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindTextBlock("Forgot your password?")).SetText "Password"
+					AIUtil("button", "Login").Highlight
+					AIUtil("button", "Login").CheckExists True
+				Case Else
+	'				AIUtil("text_box", "E-mail:").Highlight	
+					AIUtil("text_box", "E-mail:").SetText "user@domain.com"
+					If AIUtil("text_box", "Password:").Exist(0) = True Then
+	'					AIUtil("text_box", "Password:").Highlight
+						AIUtil("text_box", "Password:").SetText "Password"
+						Set PasswordField = AIUtil("text_box", "Password:")
+					ElseIf AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")) = True Then	
+	'					AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")).Highlight
+						AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")).SetText "Password"
+						Set PasswordField = AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password"))
+					Else
+						msgbox "Can't find Password field"
+					End If
+					AIUtil("button", micAnyText, micWithAnchorAbove, PasswordField).Highlight
+					AIUtil("button", micAnyText, micWithAnchorAbove, PasswordField).CheckExists True
+			End Select
+		End If
 	End If
 	CurrentMonth = CurrentMonth + 1
 	If CurrentMonth >= 13 Then
