@@ -50,7 +50,7 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 	End If
 	AppContext.Navigate CurrentURL
 	AppContext.Sync	
-	If AIUtil.FindText("Adresse e-mail").Exist(0) = True Then
+	If AIUtil.FindText("Utilisez").Exist(0) = True Then
 		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded the French version of the page."
 	Else
 		AIUtil("text_box", "E-mail:").Highlight	
