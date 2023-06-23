@@ -49,17 +49,44 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 		CurrentURL = "https://web.archive.org/web/" & CurrentYear & CurrentMonth & "/" & Parameter.Item("URL")
 	End If
 	AppContext.Navigate CurrentURL
-	AppContext.Sync			
-	AIUtil("text_box", "E-mail:").Highlight	
-	AIUtil("text_box", "E-mail:").SetText "user@domain.com"
-	AIUtil("text_box", "Password:").Highlight
-	AIUtil("text_box", "Password:").SetText "Password"
+	AppContext.Sync	
+	If AIUtil.FindText("Adresse e-mail").Exist(0) = True Then
+		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded the French version of the page."
+	Else
+		AIUtil("text_box", "E-mail:").Highlight	
+		AIUtil.Context.Freeze 
+		AIUtil("text_box", "E-mail:").SetText "user@domain.com"
+		If AIUtil("text_box", "Password:").Exist(0) = True Then
+			AIUtil("text_box", "Password:").Highlight
+			AIUtil("text_box", "Password:").SetText "Password"
+			Set PasswordField = AIUtil("text_box", "Password:")
+		ElseIf AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")) = True Then	
+			AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")).Highlight
+			AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password")).SetText "Password"
+			Set PasswordField = AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password"))
+		Else
+			msgbox "Can't find Password field"
+		End If
+		AIUtil("button", micAnyText, micWithAnchorAbove, PasswordField).Highlight
+		AIUtil("button", micAnyText, micWithAnchorAbove, PasswordField).CheckExists True
+		'https://web.archive.org/web/200703/http://facebook.com/ has a problem, looks like it's identifying the Register box as the login?
+	'	If AIUtil("button", "Login").Exist(0) = True Then
+	'		Set LoginProperties = AIUtil("button", "Login").GetAllProperties
+	'		For i = 0 To LoginProperties.count - 1
+	'			print LoginProperties.keys()(i) & ":" & LoginProperties(LoginProperties.keys()(i))
+	'		Next
+	'		AIUtil("button", "Login").Highlight
+	'		AIUtil("button", "Login").CheckExists True
+	'	ElseIf AIUtil("button", "Login", micFromTop, 1).Exist(0) = True Then
+	'		AIUtil("button", "Login", micFromTop, 1).Highlight
+	'		AIUtil("button", "Login", micFromTop, 1).CheckExists True
+	'	Else
+	'		AIUtil("button", "Login", micWithAnchorAbove, AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password"))).Highlight
+	'		AIUtil("button", "Login", micWithAnchorAbove, AIUtil("text_box", micAnyText, micWithAnchorAbove, AIUtil.FindText("Password"))).CheckExists True
+	'	End If
 	
-	AIUtil("button", "Login", micWithAnchorAbove, AIUtil("text_box", "Password:")).Highlight
-	AIUtil("button", "Login", micWithAnchorAbove, AIUtil("text_box", "Password:")).CheckExists True
-'	AIUtil("button", "Login").Highlight
-'	AIUtil("button", "Login", micFromTop, 1).Highlight
-'	AIUtil("button", "Login", micFromTop, 1).CheckExists True
+	End If	
+	
 	CurrentMonth = CurrentMonth + 1
 	If CurrentMonth >= 13 Then
 		CurrentYear = CurrentYear + 1
@@ -70,10 +97,8 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 			msgbox "Date Error"
 		End If
 	End If
-
+	AIUtil.Context.Unfreeze
 Next
-
-
 
 'Close the application at the end of your script
 'AppContext.Close											

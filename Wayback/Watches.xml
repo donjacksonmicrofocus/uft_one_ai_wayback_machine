@@ -1,3 +1,4 @@
 ﻿<Properties>
-  <WatchEntry0 value="AIUtil(&quot;button&quot;, &quot;Login&quot;).Highlight" />
+  <WatchEntry0 value="AIUtil.FindText(&quot;Login&quot;).highlight" />
+  <WatchEntry1 value="AIUtil(&quot;button&quot;,&quot;Login&quot;).highlight" />
 </Properties>
