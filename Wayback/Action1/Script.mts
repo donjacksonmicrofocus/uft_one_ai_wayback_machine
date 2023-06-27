@@ -168,7 +168,11 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 					AIUtil("button", "Log In").Highlight
 					AIUtil("button", "Log In").CheckExists True
 				Case ((CurrentYearPlusMonth >= 201205) and (CurrentYearPlusMonth < 202011))
-					AIUtil.FindTextBlock("facebook").Hover
+					If AIUtil.FindTextBlock("facebook", micFromTop, 1).Exist(0) = True Then
+						AIUtil.FindTextBlock("facebook", micFromTop, 1).Hover
+					Else
+						AIUtil.FindTextBlock("facebook").Hover
+					End If
 '					AIUtil("text_box", "Email or Phone").Highlight
 					AIUtil("text_box", "Email or Phone").SetText "user@domain.com"
 '					AIUtil("text_box", "Password").Highlight
