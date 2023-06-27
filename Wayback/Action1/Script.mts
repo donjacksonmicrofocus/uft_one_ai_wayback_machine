@@ -176,7 +176,11 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).Highlight
 					AIUtil("button", micAnyText, micWithAnchorOnLeft, AIUtil("text_box", "Password")).CheckExists True
 				Case ((CurrentYearPlusMonth >= 201006) and (CurrentYearPlusMonth < 201205))
-					AIUtil.FindTextBlock("facebook").Hover
+					If AIUtil.FindTextBlock("facebook", micFromTop, 1).Exist(0) = True Then
+						AIUtil.FindTextBlock("facebook", micFromTop, 1).Hover
+					Else
+						AIUtil.FindTextBlock("facebook").Hover
+					End If
 					AIUtil.Context.Unfreeze
 					AIUtil.FindText("It's free").Click
 					AIUtil.Context.Freeze
