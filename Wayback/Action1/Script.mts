@@ -99,7 +99,7 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 			'######################################################################################################
 			'Change 5 https://web.archive.org/web/201205/http://facebook.com/ login label changed to be "Email or Phone"
 			'######################################################################################################
-			'Change 6 https://web.archive.org/web/202011/http://facebook.com/ login label changed to be "Email or Phone Number", page redesigned, but if label hadn't changed it 
+			'Change 6 https://web.archive.org/web/201911/http://facebook.com/ login label changed to be "Email or Phone Number", page redesigned, but if label hadn't changed it 
 			'	wouldn't have mattered
 			'######################################################################################################
 			'Change 7 https://web.archive.org/web/202110/http://facebook.com/ Cookies popup screen added, have to handle
@@ -156,7 +156,7 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 					AIUtil("text_box", "Password").SetText "Password"
 					AIUtil("button", "Log In").Highlight
 					AIUtil("button", "Log In").CheckExists True
-				Case ((CurrentYearPlusMonth >= 202011) and (CurrentYearPlusMonth < 202204))
+				Case ((CurrentYearPlusMonth >= 201911) and (CurrentYearPlusMonth < 202204))
 					If AIUtil("button", "Allow All Cookies").Exist(0) = True Then
 						AIUtil("button", "Allow All Cookies").Click
 					End If
@@ -168,7 +168,7 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 					AIUtil("text_box", "Password").SetText "Password"
 					AIUtil("button", "Log In").Highlight
 					AIUtil("button", "Log In").CheckExists True
-				Case ((CurrentYearPlusMonth >= 201205) and (CurrentYearPlusMonth < 202011))
+				Case ((CurrentYearPlusMonth >= 201205) and (CurrentYearPlusMonth < 201911))
 					If AIUtil.FindTextBlock("facebook", micFromTop, 1).Exist(0) = True Then
 						AIUtil.FindTextBlock("facebook", micFromTop, 1).Hover
 					Else
