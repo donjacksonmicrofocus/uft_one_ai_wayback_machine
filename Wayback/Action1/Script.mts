@@ -57,7 +57,7 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 	or (CurrentYearPlusMonth = 201704) or (CurrentYearPlusMonth = 201706) or (CurrentYearPlusMonth = 201707) or (CurrentYearPlusMonth = 201801) _
 	or (CurrentYearPlusMonth = 201806) or (CurrentYearPlusMonth = 201812) or (CurrentYearPlusMonth = 201902) or (CurrentYearPlusMonth = 201908) _
 	or (CurrentYearPlusMonth = 201909) or (CurrentYearPlusMonth = 202001) or (CurrentYearPlusMonth = 202005) or (CurrentYearPlusMonth = 202006) _
-	or (CurrentYearPlusMonth = 202009) or (CurrentYearPlusMonth = 202203) or (CurrentYearPlusMonth = 202303) ) Then
+	or (CurrentYearPlusMonth = 202009) or (CurrentYearPlusMonth = 202203) or (CurrentYearPlusMonth = 202303) or (CurrentYearPlusMonth = 201604) ) Then
 		Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine is broken on this page, skipping."
 	Else
 		AppContext.Navigate CurrentURL
@@ -117,6 +117,7 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 			'https://web.archive.org/web/201507/http://facebook.com/ is broken too
 			'https://web.archive.org/web/201510/http://facebook.com/ is broken too
 			'https://web.archive.org/web/201602/http://facebook.com/ is broken too
+			'https://web.archive.org/web/201604/http://facebook.com/ is broken too
 			'https://web.archive.org/web/201607/http://facebook.com/ is broken too
 			'https://web.archive.org/web/201608/http://facebook.com/ is broken too
 			'https://web.archive.org/web/201611/http://facebook.com/ is broken too
