@@ -66,8 +66,8 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 		booForeignLanguage = AIUtil.FindText("Google Translate").Exist(0)
 		AIUtil.Context.SetBrowserScope(WebPage)
 		AIUtil.Context.Freeze
-		print AppContext.GetROProperty("OpenURL")
-		print instr(1, AppContext.GetROProperty("OpenURL"), "m.facebook.com")
+'		print AppContext.GetROProperty("OpenURL")
+'		print instr(1, AppContext.GetROProperty("OpenURL"), "m.facebook.com")
 		If (instr(1, AppContext.GetROProperty("OpenURL"), "m.facebook.com") >= 1) Then
 			Reporter.ReportEvent micWarning, "Navigating to " & CurrentURL, "The WayBack Machine loaded the  mobile version of the page, aborting."
 		ElseIf AIUtil.FindText("Mobile number").Exist(0) = True Then
@@ -144,14 +144,14 @@ For Iterator = 1 To Parameter.Item("NumberOfIterations") Step 1
 					AIUtil.Context.UnFreeze
 					If AIUtil("text_box", "Email or Phone Number").Exist(0) = True Then
 						AIUtil.Context.Freeze
-						AIUtil("text_box", "Email or Phone Number").Highlight
+'						AIUtil("text_box", "Email or Phone Number").Highlight
 						AIUtil("text_box", "Email or Phone Number").SetText "user@domain.com"
 					Else
 						AIUtil.Context.Freeze
-						AIUtil("text_box", "Email address or Phone Number").Highlight
+'						AIUtil("text_box", "Email address or Phone Number").Highlight
 						AIUtil("text_box", "Email address or Phone Number").SetText "user@domain.com"
 					End If
-					AIUtil("text_box", "Password").Highlight
+'					AIUtil("text_box", "Password").Highlight
 					AIUtil("text_box", "Password").SetText "Password"
 					AIUtil("button", "Log In").Highlight
 					AIUtil("button", "Log In").CheckExists True
