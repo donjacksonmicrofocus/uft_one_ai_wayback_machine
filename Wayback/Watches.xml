@@ -1,3 +1,4 @@
 ﻿<Properties>
-  <WatchEntry0 value="AIUtil.FindText(&quot;e sempre&quot;).highlight" />
+  <WatchEntry0 value="AIUtil.Context.SetBrowserScope(BrowserWindow)" />
+  <WatchEntry1 value="AIUtil.FindTextBlock(&quot;Google Translate&quot;).highlight" />
 </Properties>
